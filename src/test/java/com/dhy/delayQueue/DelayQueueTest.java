@@ -1,8 +1,9 @@
 package com.dhy.delayQueue;
 
 
+import com.delayTask.DelayTaskEvent;
 import com.delayTask.delayQueue.OrderDelayFactory;
-import com.delayTask.delayQueue.OrderDelayObject;
+import com.delayTask.delayQueue.OrderDelayEvent;
 import com.delayTask.domain.Order;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.BeforeTest;
@@ -16,7 +17,7 @@ public class DelayQueueTest {
     /**
      * 延迟队列
      */
-    private final DelayQueue<OrderDelayObject> delayQueue = new DelayQueue<>();
+    private final DelayQueue<DelayTaskEvent> delayQueue = new DelayQueue<>();
 
     /**
      * 开启线程不断轮询,看是否有延迟任务可以处理
@@ -27,10 +28,9 @@ public class DelayQueueTest {
             try {
                 while (true) {
                     //阻塞直到获取到某个到时的延迟任务
-                    OrderDelayObject delayObject = delayQueue.take();
-                    log.info("延迟任务信息如下: {}",delayObject);
-                    Order order = delayObject.getOrder();
-                    order.cancelOrderByTimeEnd();
+                    DelayTaskEvent delayObject = delayQueue.take();
+                    //处理到期的延迟任务
+                    delayObject.handleDelayEvent();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -43,10 +43,10 @@ public class DelayQueueTest {
      */
     @Test
     public void testOrder() throws InterruptedException {
-        OrderDelayObject orderDelay = OrderDelayFactory.newOrderDelay("大忽悠", "小风扇", 13.4, 10L);
+        OrderDelayEvent orderDelay =  OrderDelayFactory.newOrderDelay("大忽悠", "小风扇", 13.4, 10L);
         delayQueue.add(orderDelay);
 
-        OrderDelayObject orderDelay1 = OrderDelayFactory.newOrderDelay("小朋友", "冰箱", 3000.0, 20L);
+        OrderDelayEvent orderDelay1 = OrderDelayFactory.newOrderDelay("小朋友", "冰箱", 3000.0, 20L);
         delayQueue.add(orderDelay1);
 
         Thread.sleep(TimeUnit.SECONDS.toMillis(8L));

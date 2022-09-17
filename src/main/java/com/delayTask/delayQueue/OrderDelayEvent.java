@@ -1,9 +1,11 @@
 package com.delayTask.delayQueue;
 
 
+import com.delayTask.DelayTaskEvent;
 import com.delayTask.domain.Order;
 import lombok.Data;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +17,8 @@ import java.util.concurrent.TimeUnit;
  */
 @ToString
 @Data
-public class OrderDelayObject implements Delayed {
+@Slf4j
+public class OrderDelayEvent implements DelayTaskEvent {
 
     /**
      * 延迟任务唯一标识: 这里默认为当前时间戳
@@ -32,7 +35,7 @@ public class OrderDelayObject implements Delayed {
      */
     private Order order;
 
-    public OrderDelayObject(long delayTime, Order order) {
+    public OrderDelayEvent(long delayTime, Order order) {
         this.id = System.currentTimeMillis();
         //延时时间加上当前时间
         this.delayTime = System.currentTimeMillis() + delayTime;
@@ -54,6 +57,15 @@ public class OrderDelayObject implements Delayed {
      */
     @Override
     public int compareTo(Delayed obj) {
-        return Long.compare(this.delayTime, ((OrderDelayObject) obj).delayTime);
+        return Long.compare(this.delayTime, ((OrderDelayEvent) obj).delayTime);
+    }
+
+    /**
+     * 延迟任务到期后,要如何处理
+     */
+    @Override
+    public void handleDelayEvent() {
+        log.info("延迟任务信息如下: {}",this);
+        order.cancelOrderByTimeEnd();
     }
 } 

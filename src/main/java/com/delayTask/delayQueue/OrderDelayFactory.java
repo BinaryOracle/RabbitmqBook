@@ -15,7 +15,7 @@ public class OrderDelayFactory {
      * @param commodity 商品名字
      * @param delayTime 延迟时间 -- 单位为秒
      */
-    public static OrderDelayObject newOrderDelay(String username,String commodity,Double price,Long delayTime){
-        return new OrderDelayObject(TimeUnit.SECONDS.toMillis(delayTime),Order.builder().id(System.currentTimeMillis()).commodityName(commodity).userName(username).price(price).build());
+    public static OrderDelayEvent newOrderDelay(String username, String commodity, Double price, Long delayTime){
+        return new OrderDelayEvent(TimeUnit.SECONDS.toMillis(delayTime),Order.builder().id(System.currentTimeMillis()).commodityName(commodity).userName(username).price(price).build());
     }
 }

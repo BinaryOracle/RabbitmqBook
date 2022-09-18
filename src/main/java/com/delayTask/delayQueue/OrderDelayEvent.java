@@ -4,9 +4,11 @@ package com.delayTask.delayQueue;
 import com.delayTask.DelayTaskEvent;
 import com.delayTask.domain.Order;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 @ToString
 @Data
 @Slf4j
-public class OrderDelayEvent implements DelayTaskEvent {
+@NoArgsConstructor
+public class OrderDelayEvent implements DelayTaskEvent, Serializable {
 
     /**
      * 延迟任务唯一标识: 这里默认为当前时间戳

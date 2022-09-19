@@ -32,4 +32,5 @@ public class RedisZSetTest {
 
         Thread.sleep(TimeUnit.SECONDS.toMillis(30));
     }
+
 }

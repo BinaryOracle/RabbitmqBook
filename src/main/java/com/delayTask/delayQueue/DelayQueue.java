@@ -64,5 +64,6 @@ public class DelayQueue implements DelayTaskQueue<DelayTaskEvent,DelayTaskEvent>
     @Override
     public void cancel(DelayTaskEvent taskId) {
         delayQueue.remove(taskId);
+        ((OrderDelayEvent) taskId).getOrder().submitOrder();
     }
 }

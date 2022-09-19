@@ -30,7 +30,6 @@ public class DelayQueueTest {
 
         Thread.sleep(TimeUnit.SECONDS.toMillis(8L));
 
-        orderDelay.getOrder().submitOrder();
         delayTaskQueue.cancel(orderDelay);
 
         //防止程序结束
